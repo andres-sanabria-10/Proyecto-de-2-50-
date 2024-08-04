@@ -31,7 +31,12 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <button class="btn btn-outline-light " aria-current="page" href="#">Iniciar sesión</button>
+                        <a type="button" class="nav-link active " aria-current="page" data-bs-toggle="modal"
+                            data-bs-target="#loginModal" href="">Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a type="button" class="nav-link active " aria-current="page" data-bs-toggle="modal"
+                            data-bs-target="#RegisterModal" href="">Registrar usuario</a>
                     </li>
                 </ul>
             </div>
@@ -39,56 +44,196 @@
     </nav>
 
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="p-3 border bg-light">Contenedor 1</div>
-            </div>
-            <div class="col-12 col-md-6 align-self-center">
-                
-                    <h1 class="text-center">Servicios</h1>
-                    <div class="p-3 border bg-light">
-                        <div id="carouselExampleCaptions" class="carousel slide carousel-dark" data-bs-ride="carousel">
 
+
+    <!-- Modal para iniciar sesión  -->
+    <div class="modal " id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Inicio de sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Sign In Form -->
+                    <form id="loginForm">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <label for="floatingInput">Correo electrónico</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <label for="floatingPassword">Contraseña</label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
+                                type="submit">Iniciar Sesión</button>
+                            <div class="text-center">
+                                <a class="small" href="#">Olvido su contraseña?</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Registro de sesión -->
+    <div class="modal fade" id="RegisterModal" tabindex="-1" aria-labelledby="RegisterModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="RegisterModalLabel">Registro de usuarios</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    <!-- Formulario de registro de usuario -->
+                    <form id="registerForm">
+                        <div id="registerCarousel" class="carousel slide" data-bs-interval="false">
                             <div class="carousel-inner">
+                                <!-- Paso 1: Correo electrónico -->
                                 <div class="carousel-item active">
-                                    <h5 class="text-dark text-center">Desparasitación</h5>
-                                    <img src="/img/desparasitacion.jpg" class="d-block w-100" alt="...">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                        <div id="emailHelp" class="form-text">Correo Electrónico que no esté asociado
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="verifyEmailBtn">Verificar y
+                                        Continuar</button>
+                                    <div id="emailVerificationMessage" class="mt-2"></div>
+                                </div>
+
+                                <!-- Paso 2: Código de verificación -->
+                                <div class="carousel-item">
+                                    <div class="mb-3">
+                                        <label for="verificationCode" class="form-label">Código de verificación</label>
+                                        <input type="text" class="form-control" id="verificationCode" required>
+                                        <div class="form-text">Ingrese el código de verificación enviado a su correo
+                                        </div>
+                                    </div>
+
                                     
-                                    <div class="carousel-caption d-none d-md-block ">
-                                      
-                                        <p class="text-dark">Consiste en eliminar los parásitos internos y externos que
-                                            afectan a la salud de nuestras mascotas</p>
-                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="verifyCode()">Verificar y
+                                        Continuar</button>
+                                    <div id="codeVerificationMessage" class="mt-2"></div>
                                 </div>
-                                <div class="carousel-item">
-                                    <h5 class="text-dark text-center">Vacunación</h5>
-                                    <img src="/img/vacunacion.png" class="d-block w-100" alt="...">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <p class="text-dark">Existen diferentes tipos de
-                                            vacunas, cada una dirigida a prevenir enfermedades específicas</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <h5 class="text-dark text-center">Esterilización</h5>
-                                    <img src="/img/esterilizacion.jpg" class="d-block w-100" alt="...">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <p class="text-dark">La cirugía de esterilización es un procedimiento seguro y efectivo </p>
-                                    </div>
+
+                                <!-- Paso 3:  Datos personales -->
+                                <div class="carousel-item" style="  overflow-x: hidden;">
+                                    <form id="registerForm">
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6 ">
+                                                <label for="name" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="name" required>
+                                            </div>
+                                            <div class="mb-3 col-md-6  ">
+                                                <label for="lastName" class="form-label">Apellido</label>
+                                                <input type="text" class="form-control" id="lastName" required>
+                                            </div>
+
+                                            <div class="mb-3 col-md-6  ">
+                                                <label for="birthdate" class="form-label">Fecha de nacimiento</label>
+                                                <input type="date" class="form-control" id="birthdate" required>
+                                            </div>
+                                           
+
+                                            <div class="mb-3 col-md-6  ">
+                                                <label for="docNumber" class="form-label">Número de documento</label>
+                                                <input type="number" class="form-control" id="docNumber" required>
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="countryCode" class="form-label">Código de país</label>
+                                                <select class="form-select" id="countryCode" required>
+                                                    <option value="+1">+1 (USA)</option>
+                                                    <option value="+44">+44 (UK)</option>
+                                                    <option value="+34">+34 (España)</option>
+                                                    <option value="+52">+52 (México)</option>
+                                                    <option value="+57">+57 (Colombia)</option>
+                                                    <option value="+91">+91 (India)</option>
+                                                    <!-- Puedes agregar más opciones aquí -->
+                                                </select>
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="phoneNumber" class="form-label">Número de celular</label>
+                                                <input type="number" class="form-control" id="phoneNumber" placeholder="1234567890" required pattern="[0-9]{7,15}">
+                                                <small class="form-text text-muted">Ingrese su número de celular sin el código de país.</small>
+                                            </div>
+                                            
+                                            <div class="mb-3 col-md-6  ">
+                                                <label for="password" class="form-label">Contraseña</label>
+                                                <input type="password" class="form-control" id="password" required>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-primary" onclick="registerUser()">Crear
+                                            cuenta</button>
+                                    </form>
+                                    <div id="registerMessage" class=" col-md-6 col-sm-3 mt-2"></div>
                                 </div>
                             </div>
-                            <button class="carousel-control-prev" type="button"
-                                data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Anterior</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Siguiente</span>
-                            </button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container ">
+        <div class="row">
+            <div class="col-12 col-md-6 d-none d-md-block">
+                <div class="p-3 border text-center ">
+                    <img src="/img/logo2.jpg" id="logoimage" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 align-self-center">
+
+                <h1 class="text-center">Servicios</h1>
+                <div class="p-3 border bg-light">
+                    <div id="carouselExampleCaptions" class="carousel slide carousel-dark" data-bs-ride="carousel">
+
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <h5 class="text-dark text-center">Desparasitación</h5>
+                                <img src="/img/desparasitacion.jpg" class="d-block w-100" alt="...">
+
+                                <div class="carousel-caption d-none d-md-block ">
+
+                                    <p class="text-dark">Consiste en eliminar los parásitos internos y externos que
+                                        afectan a la salud de nuestras mascotas</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <h5 class="text-dark text-center">Vacunación</h5>
+                                <img src="/img/vacunacion.png" class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <p class="text-dark">Existen diferentes tipos de
+                                        vacunas, cada una dirigida a prevenir enfermedades específicas</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <h5 class="text-dark text-center">Esterilización</h5>
+                                <img src="/img/esterilizacion.jpg" class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <p class="text-dark">La cirugía de esterilización es un procedimiento seguro y
+                                        efectivo </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
                     </div>
+                </div>
             </div>
         </div>
     </div>
@@ -105,7 +250,8 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="script.js"> </script>
+    <script src="Login.js"> </script>
+    <script src="RegisterUser.js"> </script>
 
 
 </body>
