@@ -1,0 +1,6 @@
+.carousel-item {
+    height: 0;
+    padding-bottom: 56.25%; /* Proporción 16:9 */
+    position: relative;
+    overflow: hidden;
+}
