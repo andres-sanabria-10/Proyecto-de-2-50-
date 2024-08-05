@@ -1,6 +1,7 @@
 //editar perfil
 document.addEventListener('DOMContentLoaded', function() {
     const configuracionBtn = document.getElementById('configuracionBtn');
+    const MobileconfiguracionBtn = document.getElementById('MobileconfiguracionBtn');
     const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
     const editProfileForm = document.getElementById('editProfileForm');
     const editNameInput = document.getElementById('editName');
@@ -8,6 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let userId;
 
     configuracionBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        cargarDatosUsuario();
+    });
+
+    MobileconfiguracionBtn.addEventListener('click', function(e) {
         e.preventDefault();
         cargarDatosUsuario();
     });

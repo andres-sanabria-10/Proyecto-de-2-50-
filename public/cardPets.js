@@ -1,5 +1,7 @@
 async function getPetsByUser() {
     try {
+        const token = localStorage.getItem('token');
+        console.log('Token:', token); // Imprime el token
         const response = await fetch('https://veterinaria-5tmd.onrender.com/pet/data', {
             method: 'GET',
             headers: {
