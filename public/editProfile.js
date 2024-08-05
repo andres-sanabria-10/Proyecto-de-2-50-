@@ -1,4 +1,3 @@
-//editar perfil
 document.addEventListener('DOMContentLoaded', function() {
     const configuracionBtn = document.getElementById('configuracionBtn');
     const MobileconfiguracionBtn = document.getElementById('MobileconfiguracionBtn');
@@ -19,9 +18,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function cargarDatosUsuario() {
-        const token = localStorage.getItem('token'); // Asume que el token está almacenado en localStorage
+        const token = localStorage.getItem('token');
         if (!token) {
-            alert('No hay token de autorización. Por favor, inicie sesión nuevamente.');
+            Swal.fire({
+                title: 'Error',
+                text: 'No hay token de autorización. Por favor, inicie sesión nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
             return;
         }
 
@@ -44,7 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error al cargar datos:', error);
-            alert('No se pudieron cargar los datos del usuario');
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudieron cargar los datos del usuario',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
         });
     }
 
@@ -75,7 +84,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function actualizarPerfil() {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('No hay token de autorización. Por favor, inicie sesión nuevamente.');
+            Swal.fire({
+                title: 'Error',
+                text: 'No hay token de autorización. Por favor, inicie sesión nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
             return;
         }
 
@@ -100,12 +114,22 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log('Perfil actualizado:', data);
-            alert('Perfil actualizado con éxito');
+            Swal.fire({
+                title: 'Éxito',
+                text: 'Perfil actualizado con éxito',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
             editProfileModal.hide();
         })
         .catch(error => {
             console.error('Error al actualizar perfil:', error);
-            alert('No se pudo actualizar el perfil');
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudo actualizar el perfil',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
         });
     }
 });

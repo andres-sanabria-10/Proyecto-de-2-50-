@@ -39,24 +39,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     switch (data.data.role) {
                         case 'Admin':
                             window.location.href = '/Admin';
-
                             break;
                         case 'Usuario':
                             window.location.href = '/User';
-
                             break;
                         default:
                             console.log('Rol no reconocido:', data.data.role);
-                            alert('Inicio de sesión exitoso, pero el rol no está definido correctamente');
+                            Swal.fire({
+                                title: 'Advertencia',
+                                text: 'Inicio de sesión exitoso, pero el rol no está definido correctamente',
+                                icon: 'warning',
+                                confirmButtonText: 'Ok'
+                            });
                     }
                 } else {
                     console.log('Información de rol no encontrada en la respuesta:', data);
-                    alert('Inicio de sesión exitoso, pero no se pudo determinar el rol del usuario');
+                    Swal.fire({
+                        title: 'Advertencia',
+                        text: 'Inicio de sesión exitoso, pero no se pudo determinar el rol del usuario',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok'
+                    });
                 }
             })
             .catch(error => {
                 console.error('Error de inicio de sesión:', error);
-                alert(error.message || error.error || 'Ocurrió un error al intentar iniciar sesión');
+                Swal.fire({
+                    title: 'Error',
+                    text: error.message || error.error || 'Ocurrió un error al intentar iniciar sesión',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
             });
     });
 });
