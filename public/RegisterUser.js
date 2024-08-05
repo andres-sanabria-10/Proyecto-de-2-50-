@@ -90,7 +90,8 @@ function registerUser() {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Ocurrió un error al conectar con el servidor',
+            text: `Ocurrió un error al conectar con el servidor ${error}`,
         });
     });
 }
+
