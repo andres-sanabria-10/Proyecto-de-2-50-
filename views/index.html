@@ -70,7 +70,70 @@
                             <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
                                 type="submit">Iniciar Sesión</button>
                             <div class="text-center">
-                                <a class="small" href="#">Olvido su contraseña?</a>
+                                <a class="small" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#PasswordResetModal">¿Olvidó su contraseña?</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para recuperación de contraseña -->
+    <div class="modal fade" id="PasswordResetModal" tabindex="-1" aria-labelledby="PasswordResetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="PasswordResetModalLabel">Recuperar contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario de recuperación de contraseña -->
+                    <form id="passwordResetForm">
+                        <div id="passwordResetCarousel" class="carousel slide" data-bs-interval="false">
+                            <div class="carousel-inner">
+                                <!-- Paso 1: Ingresar correo electrónico -->
+                                <div class="carousel-item active">
+                                    <div class="mb-3">
+                                        <label for="resetEmail" class="form-label">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="resetEmail" required>
+                                        <div id="resetEmailHelp" class="form-text">Ingrese su correo electrónico
+                                            registrado.</div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="sendVerificationCodeBtn">Enviar
+                                        código de verificación</button>
+                                    <div id="emailVerificationMessage" class="mt-2"></div>
+                                </div>
+
+                                <!-- Paso 2: Ingresar código de verificación -->
+                                <div class="carousel-item">
+                                    <div class="mb-3">
+                                        <label for="resetVerificationCode" class="form-label">Código de
+                                            verificación</label>
+                                        <input type="text" class="form-control" id="resetVerificationCode" required>
+                                        <div class="form-text">Ingrese el código de verificación enviado a su correo.
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="verifyResetCodeBtn">Verificar
+                                        código</button>
+                                    <div id="codeVerificationMessage" class="mt-2"></div>
+                                </div>
+
+                                <!-- Paso 3: Ingresar nueva contraseña -->
+                                <div class="carousel-item">
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">Nueva contraseña</label>
+                                        <input type="password" class="form-control" id="newPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirmar nueva
+                                            contraseña</label>
+                                        <input type="password" class="form-control" id="confirmPassword" required>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="resetPasswordBtn">Restablecer
+                                        contraseña</button>
+                                    <div id="resetPasswordMessage" class="mt-2"></div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -80,7 +143,7 @@
     </div>
 
     <!-- Modal para Registro de sesión -->
-    <div class="modal fade" id="RegisterModal" tabindex="-1" aria-labelledby="RegisterModalLabel" >
+    <div class="modal fade" id="RegisterModal" tabindex="-1" aria-labelledby="RegisterModalLabel">
         <div class="modal-dialog  modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -114,7 +177,7 @@
                                         </div>
                                     </div>
 
-                                    
+
                                     <button type="button" class="btn btn-primary" onclick="verifyCode()">Verificar y
                                         Continuar</button>
                                     <div id="codeVerificationMessage" class="mt-2"></div>
@@ -137,19 +200,21 @@
                                                 <label for="birthdate" class="form-label">Fecha de nacimiento</label>
                                                 <input type="date" class="form-control" id="birthdate" required>
                                             </div>
-                                           
+
 
                                             <div class="mb-3 col-md-6  ">
                                                 <label for="docNumber" class="form-label">Número de documento</label>
                                                 <input type="number" class="form-control" id="docNumber" required>
                                             </div>
-                                            
+
                                             <div class="mb-3 col-md-6">
                                                 <label for="phoneNumber" class="form-label">Número de celular</label>
-                                                <input type="number" class="form-control" id="phoneNumber" placeholder="1234567890" required pattern="[0-9]{7,15}">
-                                                <small class="form-text text-muted">Ingrese su número de celular sin el código de país.</small>
+                                                <input type="number" class="form-control" id="phoneNumber"
+                                                    placeholder="1234567890" required pattern="[0-9]{7,15}">
+                                                <small class="form-text text-muted">Ingrese su número de celular sin el
+                                                    código de país.</small>
                                             </div>
-                                            
+
                                             <div class="mb-3 col-md-6  ">
                                                 <label for="password" class="form-label">Contraseña</label>
                                                 <input type="password" class="form-control" id="password" required>
@@ -241,6 +306,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="Login.js"> </script>
     <script src="RegisterUser.js"> </script>
+    <script src="resertPassword.js"></script>
 
 
 </body>
