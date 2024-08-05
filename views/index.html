@@ -80,7 +80,7 @@
     </div>
 
     <!-- Modal para Registro de sesión -->
-    <div class="modal fade" id="RegisterModal" tabindex="-1" aria-labelledby="RegisterModalLabel" aria-hidden="true">
+    <div class="modal fade" id="RegisterModal" tabindex="-1" aria-labelledby="RegisterModalLabel" >
         <div class="modal-dialog  modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -143,18 +143,7 @@
                                                 <label for="docNumber" class="form-label">Número de documento</label>
                                                 <input type="number" class="form-control" id="docNumber" required>
                                             </div>
-                                            <div class="mb-3 col-md-6">
-                                                <label for="countryCode" class="form-label">Código de país</label>
-                                                <select class="form-select" id="countryCode" required>
-                                                    <option value="+1">+1 (USA)</option>
-                                                    <option value="+44">+44 (UK)</option>
-                                                    <option value="+34">+34 (España)</option>
-                                                    <option value="+52">+52 (México)</option>
-                                                    <option value="+57">+57 (Colombia)</option>
-                                                    <option value="+91">+91 (India)</option>
-                                                    <!-- Puedes agregar más opciones aquí -->
-                                                </select>
-                                            </div>
+                                            
                                             <div class="mb-3 col-md-6">
                                                 <label for="phoneNumber" class="form-label">Número de celular</label>
                                                 <input type="number" class="form-control" id="phoneNumber" placeholder="1234567890" required pattern="[0-9]{7,15}">

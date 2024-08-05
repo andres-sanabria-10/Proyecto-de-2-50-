@@ -53,7 +53,7 @@ function registerUser() {
         mail: document.getElementById('email').value,
         phone: document.getElementById('phoneNumber').value,
         password: document.getElementById('password').value,
-        
+
         role: "Usuario"
     };
 
@@ -90,8 +90,7 @@ function registerUser() {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: `Ocurrió un error al conectar con el servidor ${error}`,
+            text: 'Ocurrió un error al conectar con el servidor',
         });
     });
 }
-
