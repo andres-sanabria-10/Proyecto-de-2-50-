@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('https://veterinaria-5tmd.onrender.com/user/profile', {
+        fetch('https://veterinaria-5tmd.onrender.com/user/data', {
             method: 'GET',
             headers: { 
                 'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mail: editEmailInput.value
         };
 
-        fetch(`https://veterinaria-5tmd.onrender.com/user/profile/${userId}`, {
+        fetch(`https://veterinaria-5tmd.onrender.com/user/${userId}`, {
             method: 'PUT',
             headers: { 
                 'Content-Type': 'application/json',
