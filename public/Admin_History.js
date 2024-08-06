@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     const mainContent = document.getElementById('Principal');
     const Procesos = document.getElementById('Procesos');
-    const MobileMascotas = document.getElementById('MobileMascotas');
+    const MobileProcesos = document.getElementById('MobileProcesos');
 
     function handleProcesos(e) {
         e.preventDefault();
         const gestionCalendarchHTML = ` 
-         <div class="container mt-5" style="max-width: 80vw; overflow-x: auto">
+         <div class="container mt-5" >
         <h1 class="mb-4">Citas Veterinarias</h1>
         
         
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         <button class="btn btn-primary" onclick="fetchAppointments()">Buscar Citas</button>
         
-        <div class="mt-4">
+        <div class="mt-4" style="max-width: 80vw; max-height: 50vh; overflow-y: auto; overflow-x: auto">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -161,10 +161,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    /*
-    if (MobileMascotas) {
-        MobileMascotas.addEventListener('click', handleUserMascotas);
-    }*/
+    
+    if (MobileProcesos) {
+        MobileProcesos.addEventListener('click', handleProcesos);
+    }
 
 })
 
