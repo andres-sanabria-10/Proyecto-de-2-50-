@@ -78,7 +78,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="/">Cerrar Sesión</a></li>
+                            <li><a type="button" class="dropdown-item"  id="logoutBtn">Cerrar Sesión</a></li>
                         </ul>
                     </div>
                 </div>
@@ -194,6 +194,39 @@
     </div>
 
 
+    <script>
+        const API_URL = 'https://veterinaria-5tmd.onrender.com';
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const userRole = localStorage.getItem('userRole');
+            if (!token || userRole !== 'Admin') {
+                window.location.href = '/';
+                return;
+            }
+            fetch(`${API_URL}/api/admin`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No autorizado');
+                }
+                return response.json();
+            })
+    
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userRole');
+                window.location.href = '/';
+            });
+        });
+    </script>
+    
+    
+    
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="editProfile.js"></script>
     <script src="calenderAdmin.js"></script>
@@ -208,6 +241,8 @@
         crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
 
 </body>

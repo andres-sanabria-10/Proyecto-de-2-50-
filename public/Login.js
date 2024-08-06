@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 console.log('Inicio de sesión exitoso:', data);
                 localStorage.setItem('token', data.tokenSession);
+                localStorage.setItem('userRole', data.data.role);
 
                 // Cierra el modal
                 var modal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
