@@ -141,13 +141,43 @@ document.addEventListener('DOMContentLoaded', function () {
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
+                                        <th>Marca de vacuna</th>
                                         <th>Fecha de administración</th>
                                         <th>Veterinario</th>
                                     </tr>
                                 </thead>
                                 <tbody id="vaccineTableBody">
                                     <!-- Los datos de las vacunas se insertarán aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Historial -->
+            <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="historyModalLabel">Historial</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Razon</th>
+                                        <th>Fecha</th>
+                                        <th>Diagnóstico</th>
+                                        <th>Tratamiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyTableBody">
+                                    <!-- Los datos del historial se insertarán aquí -->
                                 </tbody>
                             </table>
                         </div>
@@ -177,7 +207,7 @@ async function mostrarVacunas(petId) {
     try {
         const response = await fetch(`https://veterinaria-5tmd.onrender.com/vaccinations/${petId}`, {
             method: 'GET',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
             }
         });
@@ -189,7 +219,7 @@ async function mostrarVacunas(petId) {
 
         const vaccines = await response.json();
         mostrarTablaVacunas(vaccines);
-        
+
         // Mostrar el modal
         const vaccineModal = new bootstrap.Modal(document.getElementById('vaccineModal'));
         vaccineModal.show();
@@ -219,9 +249,64 @@ function mostrarTablaVacunas(vaccines) {
     vaccines.forEach(vaccine => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${vaccine.name}</td>
+            <td>${vaccine.vaccineType}</td>
             <td>${new Date(vaccine.dateAdministered).toLocaleDateString()}</td>
-            <td>${vaccine.veterinarian.name} (${vaccine.veterinarian.email})</td>
+            <td>${vaccine.veterinarian.name} </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+
+// Función para mostrar el historial médico
+async function mostrarHistorial(petId) {
+    try {
+        const response = await fetch(`https://veterinaria-5tmd.onrender.com/medicalHistory/${petId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al obtener el historial médico');
+        }
+
+        const medicalHistory = await response.json();
+        mostrarTablaHistorial(medicalHistory);
+
+        // Mostrar el modal
+        const historyModal = new bootstrap.Modal(document.getElementById('historyModal'));
+        historyModal.show();
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        });
+    }
+}
+
+// Función para mostrar los datos del historial en la tabla
+function mostrarTablaHistorial(medicalHistory) {
+    const tableBody = document.getElementById('historyTableBody');
+    tableBody.innerHTML = '';
+
+    if (medicalHistory.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="3">No se encontró historial médico para esta mascota</td></tr>';
+        return;
+    }
+
+    medicalHistory.forEach(record => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${record.reason}</td>
+            <td>${new Date(record.date).toLocaleDateString()}</td>
+            <td>${record.diagnosis }</td>
+             <td>${record.treatment }</td>
         `;
         tableBody.appendChild(row);
     });
@@ -280,6 +365,13 @@ function displayPets(pets) {
         vacunasButton.classList.add('btn-info');
         vacunasButton.addEventListener('click', () => mostrarVacunas(pet._id));
 
+
+        const historialButton = clone.querySelector('.delete-pet');
+        historialButton.textContent = 'Historial';
+        historialButton.classList.remove('btn-danger');
+        historialButton.classList.add('btn-warning');
+        historialButton.addEventListener('click', () => mostrarHistorial(pet._id));
+
         container.appendChild(clone);
     });
 }
@@ -337,13 +429,13 @@ async function createPet() {
         }
 
         const result = await response.json();
-        
+
         // Cerrar el modal
         $('#createPetModal').modal('hide');
-        
+
         // Limpiar el formulario
         document.getElementById('createPetForm').reset();
-        
+
         // Mostrar mensaje de éxito
         Swal.fire({
             title: 'Éxito',
