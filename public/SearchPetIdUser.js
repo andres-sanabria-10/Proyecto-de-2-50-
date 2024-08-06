@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function handleSearchAdmin(e) {
         e.preventDefault();
         const gestionSearchHTML = `
-        <div class="container px-5 my-5 text-center" id="probaractualizar" style="background-color: aquamarine; max-height: 90vh; overflow-y: auto">
+        <div class="container px-5 my-5 text-center" id="probaractualizar" style=" max-height: 90vh; overflow-y: auto">
                 <div class="mt-3">
                     <label for="documentInput" class="form-label">Ingrese el documento de identidad:</label>
                     <input type="text" id="documentInput" class="form-control" placeholder="Número de documento">

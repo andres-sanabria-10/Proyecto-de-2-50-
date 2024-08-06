@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                     </div>
                 </div>
-                <div class="container  px-5 my-2 " style="background-color: aqua; width:85% ">
+                <div class="container  px-5 my-2 " style=" width:85% ">
                     <div class="row row-cols-1 row-cols-md-3 g-4" id="petCardsContainer">
                         <!-- Las tarjetas de mascotas se insertarán aquí dinámicamente -->
                     </div>
