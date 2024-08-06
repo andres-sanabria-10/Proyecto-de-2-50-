@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const mainContent = document.getElementById('Principal');
     const Buscar = document.getElementById('SearchForDocUser');
+    const MobileBuscar = document.getElementById('MobileBuscar');
     function handleSearchAdmin(e) {
         e.preventDefault();
         const gestionSearchHTML = `
@@ -22,10 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (Buscar) {
         Buscar.addEventListener('click', handleSearchAdmin);
     }
-    /*   if (Mobilecalendario) {
-           Mobilecalendario.addEventListener('click', handleGestionCalendarioClick);
+       if (MobileBuscar) {
+           MobileBuscar.addEventListener('click', handleSearchAdmin);
        }
-   */
+   
 
 
 
