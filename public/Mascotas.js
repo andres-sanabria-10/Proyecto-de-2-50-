@@ -177,8 +177,8 @@ async function mostrarVacunas(petId) {
     try {
         const response = await fetch(`https://veterinaria-5tmd.onrender.com/vaccinations/${petId}`, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            headers: { 
+                'Content-Type': 'application/json',
             }
         });
 
@@ -204,6 +204,9 @@ async function mostrarVacunas(petId) {
     }
 }
 
+
+
+
 function mostrarTablaVacunas(vaccines) {
     const tableBody = document.getElementById('vaccineTableBody');
     tableBody.innerHTML = '';
@@ -223,6 +226,7 @@ function mostrarTablaVacunas(vaccines) {
         tableBody.appendChild(row);
     });
 }
+
 
 async function getPetsByUser() {
     try {
