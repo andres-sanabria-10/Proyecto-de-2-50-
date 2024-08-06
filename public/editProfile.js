@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const editProfileForm = document.getElementById('editProfileForm');
     const editNameInput = document.getElementById('editName');
     const editEmailInput = document.getElementById('editEmail');
+    const editPhoneInput = document.getElementById('editPhone');
+
     let userId;
 
 
@@ -65,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         editNameInput.value = user.name || '';
         editEmailInput.value = user.mail || '';
+        editPhoneInput.value = user.phone || '';
         
         console.log('Valores establecidos en el modal:');
         console.log('Nombre:', editNameInput.value);
@@ -98,7 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const updatedData = {
             name: editNameInput.value,
-            mail: editEmailInput.value
+            mail: editEmailInput.value,
+            phone:editPhoneInput.value
         };
 
         fetch(`https://veterinaria-5tmd.onrender.com/user/${userId}`, {
