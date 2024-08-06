@@ -129,6 +129,34 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                     </div>
                 </template>
+
+                <div class="modal fade" id="vaccineModal" tabindex="-1" aria-labelledby="vaccineModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="vaccineModalLabel">Vacunas</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Fecha de administración</th>
+                                        <th>Veterinario</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vaccineTableBody">
+                                    <!-- Los datos de las vacunas se insertarán aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         
         `;
         mainContent.innerHTML = gestionSearchHTML;
@@ -143,6 +171,58 @@ document.addEventListener('DOMContentLoaded', function () {
         MobileMascotas.addEventListener('click', handleUserMascotas);
     }
 })
+
+
+async function mostrarVacunas(petId) {
+    try {
+        const response = await fetch(`https://veterinaria-5tmd.onrender.com/vaccinations/${petId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al obtener las vacunas');
+        }
+
+        const vaccines = await response.json();
+        mostrarTablaVacunas(vaccines);
+        
+        // Mostrar el modal
+        const vaccineModal = new bootstrap.Modal(document.getElementById('vaccineModal'));
+        vaccineModal.show();
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        });
+    }
+}
+
+function mostrarTablaVacunas(vaccines) {
+    const tableBody = document.getElementById('vaccineTableBody');
+    tableBody.innerHTML = '';
+
+    if (vaccines.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="3">No se encontraron vacunas para esta mascota</td></tr>';
+        return;
+    }
+
+    vaccines.forEach(vaccine => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${vaccine.name}</td>
+            <td>${new Date(vaccine.dateAdministered).toLocaleDateString()}</td>
+            <td>${vaccine.veterinarian.name} (${vaccine.veterinarian.email})</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
 
 async function getPetsByUser() {
     try {
@@ -189,6 +269,12 @@ function displayPets(pets) {
 
         clone.querySelector('.edit-pet').addEventListener('click', () => editPet(pet._id));
         clone.querySelector('.delete-pet').addEventListener('click', () => deletePet(pet._id));
+
+        const vacunasButton = clone.querySelector('.edit-pet');
+        vacunasButton.textContent = 'Vacunas';
+        vacunasButton.classList.remove('btn-primary');
+        vacunasButton.classList.add('btn-info');
+        vacunasButton.addEventListener('click', () => mostrarVacunas(pet._id));
 
         container.appendChild(clone);
     });

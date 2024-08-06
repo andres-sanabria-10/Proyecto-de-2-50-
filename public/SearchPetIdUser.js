@@ -86,7 +86,7 @@ function displaySearchResults(pets) {
             resultsHTML += `
                 <div class="col-md-4 mb-3" id="probaractualizar">
                     <div class="card">
-                        <img src="${pet.photo || 'path/to/default/image.jpg'}" class="card-img-top" alt="${pet.name}">
+                        <img src="${pet.photo || 'path/to/default/image.jpg'}" class="card-img-top" alt="${pet.name}" style="height: 50%;">
                         <div class="card-body">
                             <h5 class="card-title">${pet.name}</h5>
                             <p class="card-text">Especie: ${pet.species}</p>

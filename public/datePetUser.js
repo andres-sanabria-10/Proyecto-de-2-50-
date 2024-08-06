@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const mainContent = document.getElementById('Principal');
     const SolicitudDeCita = document.getElementById('SolicitudDeCita');
-    const MobileMascotas = document.getElementById('MobileMascotas');
+    const MobileCita = document.getElementById('MobileCita');
 
     function handleUserCalendario(e) {
         e.preventDefault();
@@ -524,9 +524,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    /*
-    if (MobileMascotas) {
-        MobileMascotas.addEventListener('click', handleUserMascotas);
-    }*/
+    
+    if (MobileCita) {
+        MobileCita.addEventListener('click', handleUserCalendario);
+    }
 
 })

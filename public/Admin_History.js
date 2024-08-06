@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <input type="hidden" id="vaccinePetId" name="petId">
                             <input type="hidden" id="vaccineAppointmentId" name="appointmentId">
                             <div class="mb-3">
-                                <label for="vaccineType" class="form-label">Tipo de Vacuna</label>
+                                <label for="vaccineType" class="form-label">Marca de Vacuna</label>
                                 <input type="text" class="form-control" id="vaccineType" name="vaccineType" required>
                             </div>
                             <div class="mb-3">
@@ -114,43 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
         mainContent.innerHTML = gestionCalendarchHTML;
 
-       
-       
-
-
-      
-
-        function deleteAppointment(appointmentId) {
-    const token = document.getElementById('tokenInput').value;
-    
-    if (confirm('¿Estás seguro de que quieres eliminar esta cita?')) {
-        fetch(`https://veterinaria-5tmd.onrender.com/scheduledAppointments/${appointmentId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Ajusta según cómo almacenas el token
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert(data.message || 'Cita eliminada con éxito');
-            fetchAppointments();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error al eliminar la cita: ' + error.message);
-        });
-    }
-}
-
-    
-
-
 
 
     }
@@ -161,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    
+
     if (MobileProcesos) {
         MobileProcesos.addEventListener('click', handleProcesos);
     }
@@ -172,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function fetchAppointments() {
     const appointmentType = document.getElementById('appointmentType').value;
     const tableBody = document.getElementById('appointmentsTableBody');
-    
+
     tableBody.innerHTML = '';
 
     const apiUrl = `https://veterinaria-5tmd.onrender.com/scheduledAppointments/${appointmentType}`;
@@ -185,20 +148,20 @@ function fetchAppointments() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No se encontraron citas</td></tr>';
-            return;
-        }
-        data.forEach(appointment => {
-            const row = tableBody.insertRow();
-            row.innerHTML = `
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No se encontraron citas</td></tr>';
+                return;
+            }
+            data.forEach(appointment => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
                 <td>${new Date(appointment.date).toLocaleDateString()}</td>
                 <td>${appointment.time}</td>
                 <td>${appointment.appointmentType}</td>
@@ -211,20 +174,20 @@ function fetchAppointments() {
                     <button class="btn btn-sm btn-danger" onclick="deleteAppointment('${appointment._id}')">Eliminar</button>
                 </td>
             `;
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            tableBody.innerHTML = `<tr><td colspan="8" class="text-center">Error al cargar las citas: ${error.message}</td></tr>`;
         });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        tableBody.innerHTML = `<tr><td colspan="8" class="text-center">Error al cargar las citas: ${error.message}</td></tr>`;
-    });
 }
 
 
 function saveMedicalHistory() {
-    const token = document.getElementById('tokenInput').value;
+
     const form = document.getElementById('medicalHistoryForm');
     const formData = new FormData(form);
-    
+
     fetch('https://veterinaria-5tmd.onrender.com/medicalHistory', {
         method: 'POST',
         headers: {
@@ -234,23 +197,23 @@ function saveMedicalHistory() {
         },
         body: JSON.stringify(Object.fromEntries(formData))
     })
-    .then(response => response.json())
-    .then(data => {
-        alert('Historial médico guardado con éxito');
-        bootstrap.Modal.getInstance(document.getElementById('medicalHistoryModal')).hide();
-        fetchAppointments();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al guardar el historial médico');
-    });
+        .then(response => response.json())
+        .then(data => {
+            alert('Historial médico guardado con éxito');
+            bootstrap.Modal.getInstance(document.getElementById('medicalHistoryModal')).hide();
+            fetchAppointments();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al guardar el historial médico');
+        });
 }
 
 function saveVaccine() {
-    const token = document.getElementById('tokenInput').value;
+   
     const form = document.getElementById('vaccineForm');
     const formData = new FormData(form);
-    
+
     fetch('https://veterinaria-5tmd.onrender.com/vaccinations', {
         method: 'POST',
         headers: {
@@ -260,16 +223,16 @@ function saveVaccine() {
         },
         body: JSON.stringify(Object.fromEntries(formData))
     })
-    .then(response => response.json())
-    .then(data => {
-        alert('Vacuna registrada con éxito');
-        bootstrap.Modal.getInstance(document.getElementById('vaccineModal')).hide();
-        fetchAppointments();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al registrar la vacuna');
-    });
+        .then(response => response.json())
+        .then(data => {
+            alert('Vacuna registrada con éxito');
+            bootstrap.Modal.getInstance(document.getElementById('vaccineModal')).hide();
+            fetchAppointments();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al registrar la vacuna');
+        });
 }
 
 
@@ -283,5 +246,34 @@ function openHistoryModal(petId, appointmentType, appointmentId) {
         document.getElementById('vaccinePetId').value = petId;
         document.getElementById('vaccineAppointmentId').value = appointmentId;
         new bootstrap.Modal(document.getElementById('vaccineModal')).show();
+    }
+}
+
+
+function deleteAppointment(appointmentId) {
+    
+
+    if (confirm('¿Estás seguro de que quieres eliminar esta cita?')) {
+        fetch(`https://veterinaria-5tmd.onrender.com/scheduledAppointments/${appointmentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Ajusta según cómo almacenas el token
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message || 'Cita eliminada con éxito');
+                fetchAppointments();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar la cita: ' + error.message);
+            });
     }
 }
