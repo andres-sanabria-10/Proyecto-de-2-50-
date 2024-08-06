@@ -128,14 +128,36 @@ document.addEventListener('DOMContentLoaded', function () {
                             <label for="veterinario" class="form-label">Veterinario</label>
                             <input type="text" class="form-control" id="veterinario" readonly>
                         </div>
-                        <div class="mb-3">
+                       <div class="mb-3">
                             <label for="mascotaId" class="form-label">ID de la Mascota</label>
-                            <input type="text" class="form-control" id="mascotaId" required>
+                            <select class="form-control" id="mascotaId" required>
+                                <option value="">Seleccione una mascota</option>
+                                <!-- Opciones de mascotas se agregarán aquí dinámicamente -->
+                            </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="motivo" class="form-label">Motivo de la consulta</label>
-                            <textarea class="form-control" id="motivo" rows="3" required></textarea>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="procesoClinico" name="appointmentType" value="Proceso Clínico">
+                            <label class="form-check-label" for="procesoClinico">Proceso Clínico</label>
                         </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="vacunacion" name="appointmentType" value="Vacunación">
+                            <label class="form-check-label" for="vacunacion">Vacunación</label>
+                         </div>
+
+                         <!-- Select dinámico para opciones específicas -->
+                                <div class="mb-3" id="specificProcessContainer" style="display: none;">
+                                <label for="specificProcess">Opciones Específicas</label>
+                                <br>
+                                <select id="specificProcess" class="form-select">
+                                    <!-- Opciones dinámicas se añadirán aquí -->
+                                </select>
+                                </div>
+
+                                <div class="mb-3">
+                            <label for="Observacion" class="form-label">Observacion para  la consulta</label>
+                            <textarea class="form-control" id="observacion" rows="3" required></textarea>
+                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -150,6 +172,106 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
         mainContent.innerHTML = gestionCalendarchHTML;
 
+        const procesoClinicoOptions = [
+            "Exámenes Físicos de Rutina",
+            "Desparasitaciones",
+            "Control y Tratamiento de Enfermedades",
+            "Esterilización/Castración",
+            "Cuidados Dentales",
+            "Análisis de Laboratorio",
+            "Radiología y Diagnóstico por Imagen",
+            "Nutrición y Control de Peso",
+            "Tratamiento de Alergias"
+        ];
+        
+        const vacunacionOptions = [
+            "Rabia",
+            "Leptospirosis",
+            "Bordetella",
+            "Calicivirus",
+            "Parainfluenza",
+            "Virus del Moquillo",
+            "Adenovirus"
+        ];
+        
+        document.querySelectorAll('input[name="appointmentType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const specificProcessContainer = document.getElementById('specificProcessContainer');
+                const specificProcessSelect = document.getElementById('specificProcess');
+        
+                // Limpiar opciones anteriores
+                specificProcessSelect.innerHTML = "";
+        
+                // Añadir nuevas opciones dependiendo de la selección
+                let options;
+                if (this.value === "Proceso Clínico") {
+                    options = procesoClinicoOptions;
+                } else if (this.value === "Vacunación") {
+                    options = vacunacionOptions;
+                }
+        
+                // Añadir opciones al select
+                if (options) {
+                    options.forEach(option => {
+                        const opt = document.createElement('option');
+                        opt.value = option;
+                        opt.textContent = option;
+                        specificProcessSelect.appendChild(opt);
+                    });
+                    specificProcessContainer.style.display = 'block';
+                } else {
+                    specificProcessContainer.style.display = 'none';
+                }
+            });
+        });
+
+
+
+
+
+
+
+        function cargarMascotas() {
+            const token = localStorage.getItem('token');
+            let url = 'https://veterinaria-5tmd.onrender.com/pet/data';
+            
+            fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se encontraron mascotas');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const mascotaSelect = document.getElementById('mascotaId');
+                mascotaSelect.innerHTML = '<option value="">Seleccione una mascota</option>';
+                
+                if (data && data.length > 0) {
+                    data.forEach(mascota => {
+                        const option = document.createElement('option');
+                        option.value = mascota._id;
+                        option.textContent = mascota.name;
+                        mascotaSelect.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = "";
+                    option.textContent = "No hay mascotas registradas";
+                    mascotaSelect.appendChild(option);
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener mascotas:', error);
+                const mascotaSelect = document.getElementById('mascotaId');
+                mascotaSelect.innerHTML = '<option value="">Error al cargar mascotas</option>';
+            });
+        }
+       
+        
 
         const calendarioEl = document.getElementById('calendario');
         let mesActual = new Date().getMonth();
@@ -294,12 +416,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         }
 
+        
+
         document.getElementById('confirmarSeleccion').addEventListener('click', function() {
             const horarioSeleccionado = document.querySelector('input[name="horario"]:checked');
             if (horarioSeleccionado) {
                 document.getElementById('hora').value = horarioSeleccionado.value;
                 document.getElementById('veterinario').value = horarioSeleccionado.dataset.veterinarian;
                 document.getElementById('veterinario').dataset.id = horarioSeleccionado.dataset.veterinarianId;
+                cargarMascotas();
                 bootstrap.Modal.getInstance(document.getElementById('horariosModal')).hide();
                 const citaModal = new bootstrap.Modal(document.getElementById('citaModal'));
                 citaModal.show();
@@ -307,15 +432,45 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Por favor, selecciona un horario.');
             }
         });
+        async function loadPets() {
+    try {
+        const response = await fetch('/api/getPetsByUser', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Ajusta según cómo almacenas el token
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const pets = await response.json();
+            const selectElement = document.getElementById('mascotaId');
+
+            pets.forEach(pet => {
+                const option = document.createElement('option');
+                option.value = pet._id; // o el atributo que quieras usar como valor
+                option.text = pet.name; // o el atributo que quieras mostrar como texto
+                selectElement.appendChild(option);
+            });
+        } else {
+            console.error('Error al obtener las mascotas:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error en la solicitud para obtener las mascotas:', error);
+    }
+}
 
         document.getElementById('enviarSolicitud').addEventListener('click', function() {
             const fecha = document.getElementById('fecha').value;
             const hora = document.getElementById('hora').value;
             const veterinarioNombreCompleto = document.getElementById('veterinario').value;
-            const motivo = document.getElementById('motivo').value;
+      
             const mascotaId = document.getElementById('mascotaId').value;
+            const appointmentType = document.querySelector('input[name="appointmentType"]:checked')?.value;
+            const specificProcess = document.getElementById('specificProcess').value;
+            const observacion = document.getElementById('observacion').value;
 
-            if (!motivo || !mascotaId) {
+            if (!appointmentType || !mascotaId) {
                 alert('Por favor, completa todos los campos.');
                 return;
             }
@@ -324,13 +479,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+
                 },
                 body: JSON.stringify({
                     date: fecha,
                     time: hora,
-                    process: motivo,
+                   
                     petId: mascotaId,
-                    veterinarian: veterinarioNombreCompleto
+                    veterinarian: veterinarioNombreCompleto,
+                    appointmentType: appointmentType,
+                    specificProcess: specificProcess,
+                    observacion:observacion,
+                    status:"Pendiente"
+                   
                 }),
             })
             .then(response => response.json())
@@ -353,6 +515,7 @@ document.addEventListener('DOMContentLoaded', function () {
         SolicitudDeCita.addEventListener('click', handleUserCalendario);
 
     }
+  
 
     /*
     if (MobileMascotas) {
