@@ -114,9 +114,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <!-- Template para la tarjeta de mascota -->
                 <template id="petCardTemplate">
-                    <div class="col">
+                    <div class="col" >
                         <div class="card h-100">
-                            <img src="" class="card-img-top pet-photo" alt="Foto de la mascota" style="height: 50%;">
+                            <img src="" class="card-img-top pet-photo" alt="Foto de la mascota"  id="">
                             <div class="card-body">
                                 <h5 class="card-title pet-name"></h5>
                                 <p class="card-text pet-species"></p>
