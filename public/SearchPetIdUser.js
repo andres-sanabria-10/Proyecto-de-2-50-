@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (Buscar) {
         Buscar.addEventListener('click', handleSearchAdmin);
     }
-       if (MobileBuscar) {
-           MobileBuscar.addEventListener('click', handleSearchAdmin);
-       }
-   
+    if (MobileBuscar) {
+        MobileBuscar.addEventListener('click', handleSearchAdmin);
+    }
+
 
 
 
@@ -92,7 +92,9 @@ function displaySearchResults(pets) {
                             <p class="card-text">Especie: ${pet.species}</p>
                             <div class="d-flex justify-content-between">
                                 <button class="btn btn-primary btn-sm" onclick="editPet('${pet._id}')">Editar</button>
-                                <button class="btn btn-danger btn-sm" onclick="deletePet(${pet._id})">Historial</button>
+                                <button class="btn btn-danger btn-sm" onclick="HistorialPet('${pet._id}')">Historial</button>
+                                <button class="btn btn-danger btn-sm" onclick="VacunasPet('${pet._id}')">Vacunas</button>
+
                             </div>
                         </div>
                     </div>
@@ -103,6 +105,155 @@ function displaySearchResults(pets) {
         searchResults.innerHTML = resultsHTML;
     }
 }
+
+
+function HistorialPet(petId) {
+    fetch(`https://veterinaria-5tmd.onrender.com/medicalHistory/${petId}`)
+        .then(response => response.json())
+        .then(data => {
+            createHistorialModal(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'No tiene historial clínico',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        });
+}
+
+function createHistorialModal(historialData) {
+    let tableRows = '';
+    historialData.forEach(record => {
+        tableRows += `
+            <tr>
+                <td>${new Date(record.date).toLocaleDateString()}</td>
+                <td>${record.veterinarian.name}</td>
+                <td>${record.diagnosis}</td>
+                <td>${record.treatment}</td>
+            </tr>
+        `;
+    });
+
+    const modalHTML = `
+        <div class="modal fade" id="historialModal" tabindex="-1" role="dialog" aria-labelledby="historialModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="historialModalLabel">Historial Médico</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Veterinario</th>
+                                    <th>Diagnóstico</th>
+                                    <th>Tratamiento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Agregar el modal al body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Mostrar el modal
+    $('#historialModal').modal('show');
+
+    // Eliminar el modal del DOM cuando se cierre
+    $('#historialModal').on('hidden.bs.modal', function (e) {
+        $(this).remove();
+    });
+}
+
+function VacunasPet(petId) {
+    fetch(`https://veterinaria-5tmd.onrender.com/vaccinations/${petId}`)
+        .then(response => response.json())
+        .then(data => {
+            createVacunasModal(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'No tiene vacunas registradas.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        });
+}
+
+function createVacunasModal(vacunasData) {
+    let tableRows = '';
+    vacunasData.forEach(vacuna => {
+        tableRows += `
+            <tr>
+                <td>${new Date(vacuna.dateAdministered).toLocaleDateString()}</td>
+                <td>${vacuna.veterinarian.name}</td>
+                <td>${vacuna.vaccineType}</td>
+                <td>${vacuna.nextDueDate ? new Date(vacuna.nextDueDate).toLocaleDateString() : 'N/A'}</td>
+            </tr>
+        `;
+    });
+
+    const modalHTML = `
+        <div class="modal fade" id="vacunasModal" tabindex="-1" role="dialog" aria-labelledby="vacunasModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="vacunasModalLabel">Registro de Vacunas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Veterinario</th>
+                                    <th>Nombre de la Vacuna</th>
+                                    <th>Próxima Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Agregar el modal al body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Mostrar el modal
+    $('#vacunasModal').modal('show');
+
+    // Eliminar el modal del DOM cuando se cierre
+    $('#vacunasModal').on('hidden.bs.modal', function (e) {
+        $(this).remove();
+    });
+}
+
+
 function editPet(petId) {
     // Obtener la información de la mascota
     fetch(`https://veterinaria-5tmd.onrender.com/pet/info/${petId}`)
@@ -215,7 +366,7 @@ function updatePet() {
                 if (result.isConfirmed) {
                     // Recargar las tarjetas de las mascotas
                     reloadPetCards();
-                    
+
                 }
             });
         })
