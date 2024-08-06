@@ -1,9 +1,33 @@
 document.addEventListener('DOMContentLoaded', function () {
     const mainContent = document.getElementById('Principal');
     const calendario = document.getElementById('Calendario');
+    const Mobilecalendario = document.getElementById('MobileCalendario');
+    const Inicio = document.getElementById('inicioLink');
+    const MobileInicio = document.getElementById('MobileinicioLink');
 
 
-    const contenidoInicial = mainContent.innerHTML;
+
+
+    const contenidoInicial = `
+          <div class="container px-5 my-5 text-center">
+                    <img src="/img/fondo.jpg" class="img-fluid" alt="">
+                </div>
+    `;
+
+    function handleInicioClick(e) {
+        if (e) e.preventDefault();
+        mainContent.innerHTML = contenidoInicial;
+    }
+
+    if (Inicio) {
+        Inicio.addEventListener('click', handleInicioClick);
+    }
+    if (MobileInicio) {
+        MobileInicio.addEventListener('click', handleInicioClick);
+    }
+
+    // Mostrar la vista de inicio por defecto
+    handleInicioClick();
 
     function handleGestionCalendarioClick(e) {
         e.preventDefault();
@@ -69,6 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (calendario) {
         calendario.addEventListener('click', handleGestionCalendarioClick);
+    }
+    if (Mobilecalendario) {
+        Mobilecalendario.addEventListener('click', handleGestionCalendarioClick);
     }
     function initializeCalendarManagement() {
         const tokenInput = document.getElementById('tokenInput');

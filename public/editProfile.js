@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const editEmailInput = document.getElementById('editEmail');
     let userId;
 
+
+    
+
     configuracionBtn.addEventListener('click', function(e) {
         e.preventDefault();
         cargarDatosUsuario();
